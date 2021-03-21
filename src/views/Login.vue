@@ -15,7 +15,6 @@
           </div>
           <button @click="login()" class="button">Log In</button>
           <div class="extras">
-            <a>Forgot Password</a>
             <a @click="toggleForm()">Create an Account</a>
             <a @click="togglePasswordReset()">Forgot Password</a>
           </div>
@@ -93,3 +92,12 @@ export default {
 }
 }
 </script>
+
+<style>
+#login{
+  margin-top: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>

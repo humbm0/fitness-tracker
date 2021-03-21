@@ -8,7 +8,8 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     userProfile: {},
-    workouts: []
+    workouts: [],
+    loggedWorkouts: []
   },
   mutations: {
     setUserProfile(state, val) {
@@ -16,9 +17,40 @@ export default new Vuex.Store({
     },
     setWorkouts(state, val) {
       state.workouts = val
+    }, 
+    setLoggedWorkouts(state, val) {
+      state.loggedWorkouts = val
     } 
   },
   actions: {
+
+    async saveWorkout({ state }, workout) {
+      await fb.loggedWorkoutsCollection.add({
+        createdOn: new Date(),
+        name: workout.name,
+        exercises: workout.exercises,
+        user: {
+          userId: fb.auth.currentUser.uid,
+          firstname: state.userProfile.firstName,
+          lastName: state.userProfile.lastName
+        }
+      })
+    },
+
+    async getLoggedWorkouts({ commit }){
+      const userId = fb.auth.currentUser.uid
+      if (userId) {
+        fb.loggedWorkoutsCollection.where("user.userId", "==", userId).onSnapshot(function(querySnapshot) {
+          let workoutsArray = [];
+          querySnapshot.forEach(function(doc) {
+            let workout = doc.data();
+            workout.id = doc.id;
+            workoutsArray.push(workout);            
+          });
+          commit('setLoggedWorkouts', workoutsArray);
+        });
+      }
+    },
 
     async getWorkouts({ commit }){
       const userId = fb.auth.currentUser.uid

@@ -15,6 +15,24 @@ const routes = [
     }
   },
   {
+    path: '/workout/:workoutId',
+    props: true,
+    name: 'Workout',
+    component: () => import( /* webpackChunkName: "workout" */ '../views/Workout.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/active-workout/:workoutId',
+    props: true,
+    name: 'ActiveWorkout',
+    component: () => import( /* webpackChunkName: "activeWorkout" */ '../views/ActiveWorkout.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import( /* webpackChunkName: "login" */ '../views/Login.vue')
