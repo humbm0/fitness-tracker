@@ -42,7 +42,7 @@
                     <div class="title">
                       <h5>{{workout.name}}</h5> <span>{{workout.exercises.length}} exercises</span>
                     </div>
-                    <span class="description" v-for="(exercise, idx) in workout.exercises" :key="idx">{{exercise.name}}, </span>
+                    <span>Completed {{workout.createdOn | formatDate}}</span>
                   </div>
                 </div>
               </div>
@@ -115,6 +115,7 @@
 // @ is an alias to /src
 import Strava from '@/components/Strava.vue'
 import { mapState } from 'vuex'
+import moment from 'moment'
 
 export default {
   name: 'Home',
@@ -132,6 +133,14 @@ export default {
         sets: '',
         rest: ''
       }
+    }
+  },
+  filters: {
+    formatDate(val) {
+      if (!val) { return '-' }
+      
+      let date = val.toDate()
+      return moment(date).calendar(); 
     }
   },
   components: {
