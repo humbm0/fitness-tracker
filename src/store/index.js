@@ -35,6 +35,12 @@ export default new Vuex.Store({
           lastName: state.userProfile.lastName
         }
       })
+      router.push('/')
+    },
+
+    async deleteLoggedWorkout({ state }, workout) {
+      await fb.loggedWorkoutsCollection.doc(workout.id).delete();
+      return state
     },
 
     async getLoggedWorkouts({ commit }){

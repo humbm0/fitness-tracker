@@ -37,14 +37,13 @@
           <div>
             <h3>Completed workouts</h3>
             <div v-for="(workout, idx) in loggedWorkouts" :key="idx">
-                <div @click="startWorkout(workout)">
-                  <div class="workout">
+                  <div class="workout" @click="startWorkout(workout)">
                     <div class="title">
                       <h5>{{workout.name}}</h5> <span>{{workout.exercises.length}} exercises</span>
                     </div>
                     <span>Completed {{workout.createdOn | formatDate}}</span>
                   </div>
-                </div>
+                  <a @click="deleteWorkout(workout)">Delete</a>
               </div>
           </div>
 
@@ -160,7 +159,7 @@ export default {
         console.log("select yoru workout");
         this.selectWorkout = true;
       } else {
-        this.$router.push({name:'ActiveWorkout',params:{workoutId:workout.id, workout}});
+        this.$router.push({name:'Workout',params:{workoutId:workout.id, workout}});
       }
 
       // go to active workout page
@@ -184,6 +183,11 @@ export default {
       })
       this.workout.name = '';
       this.workout.exercises = [];
+    },
+    deleteWorkout(workout){
+      this.$store.dispatch('deleteLoggedWorkout', { 
+        id: workout.id
+      })
     }
   }
 }
