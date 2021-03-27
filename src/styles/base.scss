@@ -175,6 +175,7 @@ $breakpoint-xlarge: 1200px;
 .row {
   position: relative;
   display: flex;
+  flex-direction: column;
   width: 100%;
 }
 
@@ -243,8 +244,10 @@ $breakpoint-xlarge: 1200px;
   .hidden-sm {
     display: block;
   }
+  .row{
+    flex-direction: row;
+  }
 }
-
 
 input{
   background: rgba($color: #fff, $alpha: 0.05);
