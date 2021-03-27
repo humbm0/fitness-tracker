@@ -37,14 +37,14 @@
           <div>
             <h3>Completed workouts</h3>
             <div v-for="(workout, idx) in loggedWorkouts" :key="idx">
-                  <div class="workout" @click="startWorkout(workout)">
-                    <div class="title">
-                      <h5>{{workout.name}}</h5> <span>{{workout.exercises.length}} exercises</span>
-                    </div>
-                    <span>Completed {{workout.createdOn | formatDate}}</span>
-                  </div>
-                  <a @click="deleteWorkout(workout)">Delete</a>
+              <a @click="deleteWorkout(workout)">Delete</a>
+              <div class="workout" @click="startWorkout(workout)">
+                <div class="title">
+                  <h5>{{workout.name}}</h5> <span>{{workout.exercises.length}} exercises</span>
+                </div>
+                <span>Completed {{workout.createdOn | formatDate}}</span>
               </div>
+            </div>
           </div>
 
         </div>

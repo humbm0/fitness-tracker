@@ -46,7 +46,7 @@ export default new Vuex.Store({
     async getLoggedWorkouts({ commit }){
       const userId = fb.auth.currentUser.uid
       if (userId) {
-        fb.loggedWorkoutsCollection.where("user.userId", "==", userId).onSnapshot(function(querySnapshot) {
+        fb.loggedWorkoutsCollection.where("user.userId", "==", userId).orderBy("createdOn", "desc").onSnapshot(function(querySnapshot) {
           let workoutsArray = [];
           querySnapshot.forEach(function(doc) {
             let workout = doc.data();
