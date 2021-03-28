@@ -22,7 +22,9 @@ const auth = firebase.auth()
 // collection references
 const usersCollection = db.collection('users')
 const workoutsCollection = db.collection('workouts')
+const exercisesCollection = db.collection('exercises')
 const loggedWorkoutsCollection = db.collection('loggedWorkouts')
+const loggedExercisesCollection = db.collection('loggedExercises')
 
 // export utils/refs
 export {
@@ -30,5 +32,7 @@ export {
   auth,
   usersCollection,
   workoutsCollection,
-  loggedWorkoutsCollection
+  exercisesCollection,
+  loggedWorkoutsCollection,
+  loggedExercisesCollection
 }

@@ -9,6 +9,7 @@ export default new Vuex.Store({
   state: {
     userProfile: {},
     workouts: [],
+    exercises: [],
     loggedWorkouts: []
   },
   mutations: {
@@ -17,6 +18,9 @@ export default new Vuex.Store({
     },
     setWorkouts(state, val) {
       state.workouts = val
+    }, 
+    setExercises(state, val) {
+      state.exercises = val
     }, 
     setLoggedWorkouts(state, val) {
       state.loggedWorkouts = val
@@ -38,6 +42,21 @@ export default new Vuex.Store({
       router.push('/')
     },
 
+    async getLoggedExercises({ commit }){
+      const userId = fb.auth.currentUser.uid
+      if (userId) {
+        fb.loggedExercisesCollection.where("userId", "==", userId).orderBy("createdOn", "desc").onSnapshot(function(querySnapshot) {
+          let workoutsArray = [];
+          querySnapshot.forEach(function(doc) {
+            let workout = doc.data();
+            workout.id = doc.id;
+            workoutsArray.push(workout);            
+          });
+          commit('setLoggedWorkouts', workoutsArray);
+        });
+      }
+    },
+
     async deleteLoggedWorkout({ state }, workout) {
       await fb.loggedWorkoutsCollection.doc(workout.id).delete();
       return state
@@ -46,7 +65,7 @@ export default new Vuex.Store({
     async getLoggedWorkouts({ commit }){
       const userId = fb.auth.currentUser.uid
       if (userId) {
-        fb.loggedWorkoutsCollection.where("user.userId", "==", userId).orderBy("createdOn", "desc").onSnapshot(function(querySnapshot) {
+        fb.loggedWorkoutsCollection.where("userId", "==", userId).orderBy("createdOn", "desc").onSnapshot(function(querySnapshot) {
           let workoutsArray = [];
           querySnapshot.forEach(function(doc) {
             let workout = doc.data();
@@ -61,7 +80,7 @@ export default new Vuex.Store({
     async getWorkouts({ commit }){
       const userId = fb.auth.currentUser.uid
       if (userId) {
-        fb.workoutsCollection.where("user.userId", "==", userId).onSnapshot(function(querySnapshot) {
+        fb.workoutsCollection.where("userId", "==", userId).onSnapshot(function(querySnapshot) {
           let workoutsArray = [];
           querySnapshot.forEach(function(doc) {
             let workout = doc.data();
@@ -84,6 +103,31 @@ export default new Vuex.Store({
           lastName: state.userProfile.lastName
         }
       })
+    },
+
+    async getExercises({ commit }){
+      const userId = fb.auth.currentUser.uid
+      if (userId) {
+        fb.exercisesCollection.where("userId", "==", userId).onSnapshot(function(querySnapshot) {
+          let exerciseArray = [];
+          querySnapshot.forEach(function(doc) {
+            let exercise = doc.data();
+            exercise.id = doc.id;
+            exerciseArray.push(exercise);            
+          });
+          commit('setExercises', exerciseArray);
+        });
+      }
+    },
+
+    async createExercise({ state }, exercise) {
+      await fb.exercisesCollection.add({
+        createdOn: new Date(),
+        name: exercise.name,
+        description: exercise.description,
+        userId: fb.auth.currentUser.uid
+      })
+      return state
     },
 
     async signup({ dispatch }, form) {

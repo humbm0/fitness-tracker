@@ -3,7 +3,7 @@
   <div class="container">
     <div class="row">
       <div class="col-12">
-        <h1>Hi {{userProfile.firstName}}, welcome back</h1>
+        <h1>Welcome back {{userProfile.firstName}}</h1>
           <Strava />
         </div>
       </div>
@@ -238,7 +238,7 @@ export default {
     width: 520px;
     background: #282828;
     border-radius: 1rem;
-    padding: 2rem;
+    padding: 1rem;
     box-shadow: $shadow;
     .header{
       display: flex;
