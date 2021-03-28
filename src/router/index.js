@@ -1,15 +1,14 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Dashboard from '../views/Dashboard.vue'
 import { auth } from '../firebase'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/dashboard',
     name: 'Dashboard',
-    component: Dashboard,
+    component: () => import( /* webpackChunkName: "dashboard" */ '../views/Dashboard.vue'),
     meta: {
       requiresAuth: true
     }
@@ -33,10 +32,19 @@ const routes = [
     }
   },
   {
-    path: '/workout/:workoutId',
+    path: '/workouts/:workoutId',
     props: true,
     name: 'Workout',
     component: () => import( /* webpackChunkName: "workout" */ '../views/Workout.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/workouts/:workoutId/addExercises',
+    props: true,
+    name: 'AddExercises',
+    component: () => import( /* webpackChunkName: "workout" */ '../views/addExercises.vue'),
     meta: {
       requiresAuth: true
     }

@@ -5,108 +5,17 @@
       <div class="col-12">
         <h1>Welcome back {{userProfile.firstName}}</h1>
           <Strava />
-        </div>
       </div>
-      <div class="row">
+    </div>
+    <div class="row">
         <div class="col-7">
           <div class="start-workout-widget">
             <h3>Keep up your fitness goals.</h3>
             <button @click="startWorkout()">Start workout</button>
-
-            <div class="modal" v-if="selectWorkout">
-              <div class="modal-inner">
-                <div class="header">
-                  <h3>Select your workout</h3>
-                  <a @click="selectWorkout = false">Close</a>
-                </div>
-                <div v-for="(workout, idx) in workouts" :key="idx">
-                  <div @click="startWorkout(workout)">
-                    <div class="workout">
-                      <div class="title">
-                        <h5>{{workout.name}}</h5> <span>{{workout.exercises.length}} exercises</span>
-                      </div>
-                      <span class="description" v-for="(exercise, idx) in workout.exercises" :key="idx">{{exercise.name}}, </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          <div>
-            <h3>Completed workouts</h3>
-            <div v-for="(workout, idx) in loggedWorkouts" :key="idx">
-              <a @click="deleteWorkout(workout)">Delete</a>
-              <div class="workout" @click="startWorkout(workout)">
-                <div class="title">
-                  <h5>{{workout.name}}</h5> <span>{{workout.exercises.length}} exercises</span>
-                </div>
-                <span>Completed {{workout.createdOn | formatDate}}</span>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="col-4 float-right">
-          <div class="my-workouts">
-            <h2>My Workouts</h2>
-            <div v-for="(workout, idx) in workouts" :key="idx">
-              <div @click="goToWorkout(workout)">
-                <div class="workout">
-                  <div class="title">
-                    <h5>{{workout.name}}</h5> <span>{{workout.exercises.length}} exercises</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <button @click="showCreateWorkout = !showCreateWorkout">Create new workout</button>
           </div>
         </div>
-
-        <div class="modal" v-if="showCreateWorkout">
-          <div class="modal-inner">
-            <form @submit.prevent>
-              <div class="header">
-                  <h3>Create workout</h3>
-                  <a @click="showCreateWorkout = false">Close</a>
-                </div>
-              <div>
-                <input v-model="workout.name" type="text" id="workoutName" placeholder="Name"/>
-              </div>
-              <h5>Exercises</h5>
-              <div v-for="(exercise, idx) in workout.exercises" :key="idx">
-                <p>{{exercise.name}}</p>
-                <p>{{exercise.reps}}</p>
-                <p>{{exercise.sets}}</p>
-                <p>{{exercise.rest}}</p>
-              </div>
-
-              <div>
-                <input v-model="exercise.name" type="text" id="exerciseName" placeholder="Name"/>
-              </div>
-              <div>
-                <input v-model="exercise.reps" type="text" id="exerciseReps" placeholder="Reps"/>
-              </div>
-              <div>
-                <input v-model="exercise.sets" type="text" id="exerciseSets" placeholder="Sets"/>
-              </div>
-              <div>
-                <input v-model="exercise.rest" type="text" id="exerciseRests" placeholder="Rest"/>
-              </div>
-
-              <button class="secondary" @click="addExercise">Add exercise</button>
-
-              <button @click="createWorkout">Save workout</button>
-
-            </form>
-          </div>
-        </div>
-
       </div>
-    </div>
-
+  </div>
 </div>
 </template>
 
@@ -146,11 +55,11 @@ export default {
     Strava
   },
   computed: {
-    ...mapState(['userProfile', 'workouts', 'loggedWorkouts']),
+    ...mapState(['userProfile']),
   },
   mounted(){
-    this.$store.dispatch('getWorkouts');
-    this.$store.dispatch('getLoggedWorkouts');
+    // this.$store.dispatch('getWorkouts');
+    // this.$store.dispatch('getLoggedWorkouts');
   },
   methods: {
     startWorkout(workout){

@@ -8,24 +8,27 @@
         <div class="row">
             <div class="col-12">
                 <h1>Workouts</h1>
-                <div v-for="(workout, idx) in workouts" :key="idx" class="list-item">
+                <div v-for="(workout, idx) in workouts" :key="idx" class="list-item" @click="goToWorkout(workout)">
                     <h5>{{workout.name}}</h5>
                 </div>
             </div>
         </div>
 
-        <div class="createExercise modal" v-show="showCreateWorkout">
-            <div class="modal-inner">
-                <div class="header">
-                  <h4>Add new exercise</h4>
+         <div class="modal" v-if="showCreateWorkout">
+          <div class="modal-inner">
+            <form @submit.prevent>
+              <div class="header">
+                  <h3>New workout</h3>
                   <a @click="showCreateWorkout = false">Close</a>
                 </div>
-                <form @submit.prevent>
-                    <input v-model="newWorkout.name" type="text" placeholder="Name"/>
-                    <input v-model="newWorkout.description" type="text" placeholder="Description"/>
-                    <button @click="createExercise()">Save workout</button>
-                </form>
-            </div>
+              <div>
+                <input v-model="newWorkout.name" type="text" id="workoutName" placeholder="Name"/>
+              </div>
+
+              <button @click="createWorkout">Create workout</button>
+
+            </form>
+          </div>
         </div>
        
 
@@ -41,8 +44,13 @@ export default {
     return {
       showCreateWorkout: false,  
       newWorkout: {
-          name: '',
-          description: ''
+          name: ''
+      },
+      exercise: {
+        name: '',
+        reps: '',
+        sets: '',
+        rest: ''
       }
     }
   },
@@ -55,19 +63,20 @@ export default {
     }
   },
   computed: {
-    ...mapState(['userProfile', 'exercises']),
+    ...mapState(['userProfile', 'workouts']),
   },
   mounted(){
       this.$store.dispatch('getWorkouts');
   },
   methods: {
-    createWorkout(){
-        this.$store.dispatch('createWorkout', { 
+    goToWorkout(workout){
+      this.$router.push({name:'Workout',params:{workoutId:workout.id}});
+    },
+    async createWorkout(){
+        await this.$store.dispatch('createWorkout', { 
             name: this.newWorkout.name,
-            description: this.newWorkout.description,
         })
         this.newWorkout.name = '';
-        this.newWorkout.description = '';
         this.showCreateWorkout = false;
     }
   }

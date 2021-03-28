@@ -9,6 +9,7 @@ export default new Vuex.Store({
   state: {
     userProfile: {},
     workouts: [],
+    workout:{},
     exercises: [],
     loggedWorkouts: []
   },
@@ -18,6 +19,9 @@ export default new Vuex.Store({
     },
     setWorkouts(state, val) {
       state.workouts = val
+    }, 
+    setWorkout(state, val) {
+      state.workout = val
     }, 
     setExercises(state, val) {
       state.exercises = val
@@ -77,6 +81,22 @@ export default new Vuex.Store({
       }
     },
 
+    async addExercisesToWorkout({ state }, workout) {
+      console.log(workout);
+      fb.workoutsCollection.doc(workout.id).update({
+        "exercises": workout.selectedExercises
+      })
+      .then(() => {
+          console.log("Document successfully updated!");
+      })
+      .catch((error) => {
+          // The document probably doesn't exist.
+          console.error("Error updating document: ", error);
+      });
+      return state
+     
+    },
+
     async getWorkouts({ commit }){
       const userId = fb.auth.currentUser.uid
       if (userId) {
@@ -92,18 +112,41 @@ export default new Vuex.Store({
       }
     },
 
+    async getWorkout({ commit }, workout){
+      const userId = fb.auth.currentUser.uid
+      if (userId) {
+        fb.workoutsCollection.doc(workout.id).get().then((doc) => {
+            if (doc.exists) {
+                let workout = doc.data()
+                workout.id = doc.id;
+                commit('setWorkout', workout);
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+            }
+        }).catch((error) => {
+            console.log("Error getting document:", error);
+        });
+      }
+    },
+
     async createWorkout({ state }, workout) {
       await fb.workoutsCollection.add({
         createdOn: new Date(),
-        name: workout.name,
-        exercises: workout.exercises,
-        user: {
-          userId: fb.auth.currentUser.uid,
-          firstname: state.userProfile.firstName,
-          lastName: state.userProfile.lastName
-        }
+        name: workout.name, 
+        exercises: '',
+        userId: fb.auth.currentUser.uid
+      }).then(function(doc) {
+        router.push({name:'Workout',params:{workoutId:doc.id}});
       })
+      .catch(function(error) {
+          console.error("Error adding document: ", error);
+      });
+
+      return state
+     
     },
+
 
     async getExercises({ commit }){
       const userId = fb.auth.currentUser.uid
@@ -163,7 +206,7 @@ export default new Vuex.Store({
       commit('setUserProfile', userProfile.data())
       // change route to dashboard
       if (router.currentRoute.path === '/login') {
-        router.push('/')
+        router.push('/dashboard')
       }
     }
   },

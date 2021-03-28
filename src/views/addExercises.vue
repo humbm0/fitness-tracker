@@ -2,16 +2,21 @@
     <div class="container">
         <div class="row">
             <div class="header-nav-bar">
+                <div><a @click="$router.go(-1)">Cancel</a></div>
                 <div class="float-right"><a @click="showCreateExercise = true">Add new +</a></div>
             </div>
         </div>
         <div class="row">
             <div class="col-12">
-                <h1>Exercises</h1>
+                <h5>{{workout.name}}</h5>
+                <h1>Select exercises</h1>
                 <div v-for="(exercise, idx) in exercises" :key="idx" class="list-item">
-                    <h5>{{exercise.name}}</h5>
-                    <p>{{exercise.description | trimLength}}</p>
+                    <!-- <h5>{{exercise.name}}</h5>
+                    <p>{{exercise.description | trimLength}}</p> -->
+                    <input type="checkbox" :id="exercise.id" :value="exercise" v-model="selectedExercises">
+                    <label :for="exercise.id">{{ exercise.name }}</label>
                 </div>
+                <button @click="addExercises()">Add exercises</button>
             </div>
         </div>
 
@@ -37,13 +42,15 @@
 import { mapState } from 'vuex'
 
 export default {
-  name: 'Exercises',
+  name: 'AddExercises',
   data() {
     return {
-      showCreateExercise: false,  
-      newExercise: {
-          name: '',
-          description: ''
+        workout: this.$route.params.workout,
+        showCreateExercise: false,  
+        selectedExercises: [],
+        newExercise: {
+            name: '',
+            description: ''
       }
     }
   },
@@ -62,6 +69,22 @@ export default {
       this.$store.dispatch('getExercises');
   },
   methods: {
+      addExercises(){
+          console.log(this.selectedExercises);
+          let exercises = [];
+          this.selectedExercises.forEach(element => {
+              let exercise = {
+                  exercseId: element.id,
+                  name: element.name
+                  }
+                exercises.push(exercise);
+          });
+          let workout = {
+              id: this.workout.id,
+              selectedExercises: exercises
+          }
+          this.$store.dispatch('addExercisesToWorkout', workout);
+      },
     createExercise(){
         this.$store.dispatch('createExercise', { 
             name: this.newExercise.name,

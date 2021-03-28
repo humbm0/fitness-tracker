@@ -2,7 +2,7 @@
   <div class="navbar">
       <ul class="links">
         <li>
-          <router-link to="/">Dashboard</router-link>
+          <router-link to="/dashboard">Dashboard</router-link>
         </li>
         <li>
           <router-link to="/workouts">Workouts</router-link>
@@ -55,7 +55,7 @@ export default {
         align-self: center;
         font-size: 14px;
         opacity: 0.6;
-        &.router-link-exact-active{
+        &.router-link-active{
           opacity: 1;
         }
       }
