@@ -10,6 +10,7 @@ export default new Vuex.Store({
     userProfile: {},
     workouts: [],
     workout:{},
+    workoutExercises:{},
     exercises: [],
     loggedWorkouts: []
   },
@@ -22,6 +23,9 @@ export default new Vuex.Store({
     }, 
     setWorkout(state, val) {
       state.workout = val
+    }, 
+    setWorkoutExercises(state, val) {
+      state.workoutExercises = val
     }, 
     setExercises(state, val) {
       state.exercises = val
@@ -81,22 +85,6 @@ export default new Vuex.Store({
       }
     },
 
-    async addExercisesToWorkout({ state }, workout) {
-      console.log(workout);
-      fb.workoutsCollection.doc(workout.id).update({
-        "exercises": workout.selectedExercises
-      })
-      .then(() => {
-          console.log("Document successfully updated!");
-      })
-      .catch((error) => {
-          // The document probably doesn't exist.
-          console.error("Error updating document: ", error);
-      });
-      return state
-     
-    },
-
     async getWorkouts({ commit }){
       const userId = fb.auth.currentUser.uid
       if (userId) {
@@ -112,7 +100,47 @@ export default new Vuex.Store({
       }
     },
 
-    async getWorkout({ commit }, workout){
+    async addExercisesToWorkout({ state }, workout) {
+      fb.workoutsCollection.doc(workout.id).update({
+        "exercises": workout.selectedExercises
+      })
+      .then(() => {
+          console.log("Document successfully updated!");
+      })
+      .catch((error) => {
+          // The document probably doesn't exist.
+          console.error("Error updating document: ", error);
+      });
+      return state
+     
+    },
+
+    async getWorkoutExercises({ commit }, exercises){
+      if (exercises) {
+        let exerciseArray = [];
+        exercises.forEach(exercise => {
+          fb.exercisesCollection.doc(exercise).get().then((doc) => {
+            if (doc.exists) {
+                let exercise = doc.data()
+                exercise.id = doc.id;
+                exerciseArray.push(exercise); 
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+            }
+          }).catch((error) => {
+              console.log("Error getting document:", error);
+          });
+        });
+        console.log(exerciseArray);
+        commit('setWorkoutExercises', exerciseArray);
+      }
+
+      return commit
+    },
+
+    async getWorkout({ commit, dispatch }, workout){
+      commit('setWorkoutExercises', []);
       const userId = fb.auth.currentUser.uid
       if (userId) {
         fb.workoutsCollection.doc(workout.id).get().then((doc) => {
@@ -120,6 +148,8 @@ export default new Vuex.Store({
                 let workout = doc.data()
                 workout.id = doc.id;
                 commit('setWorkout', workout);
+                // console.log(workout);
+                dispatch('getWorkoutExercises', workout.exercises)
             } else {
                 // doc.data() will be undefined in this case
                 console.log("No such document!");

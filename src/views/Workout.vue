@@ -9,22 +9,19 @@
         <div class="row">
             <div class="col-12">
                 <h1>{{workout.name}}</h1>
-                <p v-if="workout.exercises">{{workout.exercises.length}} exercises</p>
+                <p>{{workoutExercises.length}} exercises</p>
                 
-                <div class="exercises" v-if="workout.exercises">
-                  <div class="col-3 workout-card" v-for="(exercise, idx) in workout.exercises" :key="idx">
-                    <p>Exercise {{idx + 1}}</p>
-                    <h4>{{exercise.name}}</h4>
-                    <p>{{exercise.reps}} reps</p>
-                    <p>{{exercise.sets}} sets</p>
-                    <p>{{exercise.rest}} rest</p>
+                <div>
+                  <div v-for="(exercise, idx) in workoutExercises" :key="idx" class="list-item">
+                      <p>Exercise {{idx + 1}}</p>
+                      <h5>{{exercise.name}}</h5>
                   </div>
-                  <button @click="startWorkout(workout)">Start workout</button>
-                  <button @click="saveWorkout(workout)">Save workout</button>
+                  <!-- <button @click="startWorkout(workout)">Start workout</button>
+                  <button @click="saveWorkout(workout)">Save workout</button> -->
                 </div>
 
                 <div>
-                  <p>This workout has no exercises...</p>
+                  <p v-if="workoutExercises.length < 0">This workout has no exercises...</p>
                   <button @click="addExercises(workout)">Add exercises</button>
                 </div>
 
@@ -46,12 +43,12 @@ export default {
   components: {
   },
   computed: {
-    ...mapState(['userProfile', 'workouts', 'workout']),
+    ...mapState(['userProfile', 'workout', 'workoutExercises']),
   },
   mounted(){
     this.$store.dispatch('getWorkout', { 
         id: this.$route.params.workoutId
-      })
+    });    
   },
   methods: {
     startWorkout(workout){
