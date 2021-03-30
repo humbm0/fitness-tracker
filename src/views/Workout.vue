@@ -12,9 +12,15 @@
                 <p>{{workoutExercises.length}} exercises</p>
                 
                 <div>
-                  <div v-for="(exercise, idx) in workoutExercises" :key="idx" class="list-item">
+                  <div v-for="(exercise, idx) in workout.exercises" :key="idx" class="list-item">
                       <p>Exercise {{idx + 1}}</p>
                       <h5>{{exercise.name}}</h5>
+                      <p v-if="exercise.reps">{{exercise.reps}} reps</p>
+                      <p v-if="exercise.time">{{exercise.timeOn}} seconds on</p>
+                      <p v-if="exercise.sets">{{exercise.sets}} sets</p>
+                      <p v-if="exercise.rest">{{exercise.rest}} seconds rest</p>
+
+                      <!-- <p v-if="exercise.workouts">{{exercise.workouts[0].reps}} reps</p> -->
                   </div>
                   <!-- <button @click="startWorkout(workout)">Start workout</button>
                   <button @click="saveWorkout(workout)">Save workout</button> -->
@@ -51,6 +57,7 @@ export default {
     });    
   },
   methods: {
+    
     startWorkout(workout){
       this.$router.push({name:'ActiveWorkout',params:{workoutId:workout.id, workout}});
     },

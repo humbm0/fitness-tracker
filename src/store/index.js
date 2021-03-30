@@ -25,7 +25,14 @@ export default new Vuex.Store({
       state.workout = val
     }, 
     setWorkoutExercises(state, val) {
-      state.workoutExercises = val
+      state.workout.exercises.forEach(exercise => {
+        if(exercise.id == val.id){
+          exercise.name = val.name;
+        }
+      });
+
+
+
     }, 
     setExercises(state, val) {
       state.exercises = val
@@ -100,6 +107,48 @@ export default new Vuex.Store({
       }
     },
 
+    async getWorkoutExercises({ commit }, exercises){
+      if (exercises) {
+        // let exerciseArray = [];
+        exercises.forEach(exercise => {
+          fb.exercisesCollection.doc(exercise.id).get().then((doc) => {
+            if (doc.exists) {
+                let exercise = doc.data();
+                exercise.id = doc.id;
+                // exerciseArray.push(exercise); 
+                commit('setWorkoutExercises', exercise);
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+            }
+          }).catch((error) => {
+              console.log("Error getting document:", error);
+          });
+        });
+      }
+
+      return commit
+    },
+
+    async getWorkout({ commit, dispatch }, workout){
+      const userId = fb.auth.currentUser.uid
+      if (userId) {
+        fb.workoutsCollection.doc(workout.id).get().then((doc) => {
+            if (doc.exists) {
+                let workout = doc.data()
+                workout.id = doc.id;
+                commit('setWorkout', workout);
+                dispatch('getWorkoutExercises', workout.exercises)
+            } else {
+                // doc.data() will be undefined in this case
+                console.log("No such document!");
+            }
+        }).catch((error) => {
+            console.log("Error getting document:", error);
+        });
+      }
+    },
+
     async addExercisesToWorkout({ state }, workout) {
       fb.workoutsCollection.doc(workout.id).update({
         "exercises": workout.selectedExercises
@@ -113,51 +162,6 @@ export default new Vuex.Store({
       });
       return state
      
-    },
-
-    async getWorkoutExercises({ commit }, exercises){
-      if (exercises) {
-        let exerciseArray = [];
-        exercises.forEach(exercise => {
-          fb.exercisesCollection.doc(exercise).get().then((doc) => {
-            if (doc.exists) {
-                let exercise = doc.data()
-                exercise.id = doc.id;
-                exerciseArray.push(exercise); 
-            } else {
-                // doc.data() will be undefined in this case
-                console.log("No such document!");
-            }
-          }).catch((error) => {
-              console.log("Error getting document:", error);
-          });
-        });
-        console.log(exerciseArray);
-        commit('setWorkoutExercises', exerciseArray);
-      }
-
-      return commit
-    },
-
-    async getWorkout({ commit, dispatch }, workout){
-      commit('setWorkoutExercises', []);
-      const userId = fb.auth.currentUser.uid
-      if (userId) {
-        fb.workoutsCollection.doc(workout.id).get().then((doc) => {
-            if (doc.exists) {
-                let workout = doc.data()
-                workout.id = doc.id;
-                commit('setWorkout', workout);
-                // console.log(workout);
-                dispatch('getWorkoutExercises', workout.exercises)
-            } else {
-                // doc.data() will be undefined in this case
-                console.log("No such document!");
-            }
-        }).catch((error) => {
-            console.log("Error getting document:", error);
-        });
-      }
     },
 
     async createWorkout({ state }, workout) {

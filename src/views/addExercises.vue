@@ -71,10 +71,22 @@ export default {
   methods: {
       addExercises(){
           console.log(this.selectedExercises);
+          let exercises = [];
+          this.selectedExercises.forEach(el => {
+              const exercise = {
+                  id: el,
+                  sets:'',
+                  reps:'',
+                  rest:'',
+                  timeOn: ''
+              }
+              exercises.push(exercise);
+          });
           const workout = {
               id: this.workout.id,
-              selectedExercises: this.selectedExercises
+              selectedExercises: exercises
           }
+          console.log(workout);
           this.$store.dispatch('addExercisesToWorkout', workout);
       },
     createExercise(){
