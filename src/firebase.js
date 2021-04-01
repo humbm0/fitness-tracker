@@ -23,6 +23,7 @@ const auth = firebase.auth()
 const usersCollection = db.collection('users')
 const workoutsCollection = db.collection('workouts')
 const exercisesCollection = db.collection('exercises')
+const workoutExercisesCollection = db.collection('workoutExercises')
 const loggedWorkoutsCollection = db.collection('loggedWorkouts')
 const loggedExercisesCollection = db.collection('loggedExercises')
 
@@ -33,6 +34,7 @@ export {
   usersCollection,
   workoutsCollection,
   exercisesCollection,
+  workoutExercisesCollection,
   loggedWorkoutsCollection,
   loggedExercisesCollection
 }

@@ -13,7 +13,7 @@
                 <div v-for="(exercise, idx) in exercises" :key="idx" class="list-item">
                     <!-- <h5>{{exercise.name}}</h5>
                     <p>{{exercise.description | trimLength}}</p> -->
-                    <input type="checkbox" :id="exercise.id" :value="exercise.id" v-model="selectedExercises">
+                    <input type="checkbox" :id="exercise.id" :value="exercise" v-model="selectedExercises">
                     <label :for="exercise.id">{{ exercise.name }}</label>
                 </div>
                 <button @click="addExercises()">Add exercises</button>
@@ -70,11 +70,12 @@ export default {
   },
   methods: {
       addExercises(){
-          console.log(this.selectedExercises);
           let exercises = [];
           this.selectedExercises.forEach(el => {
               const exercise = {
-                  id: el,
+                  id: el.id,
+                  name: el.name,
+                  description: el.description,
                   sets:'',
                   reps:'',
                   rest:'',
@@ -86,7 +87,6 @@ export default {
               id: this.workout.id,
               selectedExercises: exercises
           }
-          console.log(workout);
           this.$store.dispatch('addExercisesToWorkout', workout);
       },
     createExercise(){

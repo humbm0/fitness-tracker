@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-12">
                 <h1>Exercises</h1>
-                <div v-for="(exercise, idx) in exercises" :key="idx" class="list-item">
+                <div v-for="(exercise, idx) in exercises" :key="idx" class="list-item" @click="goToExercise(exercise)">
                     <h5>{{exercise.name}}</h5>
                     <p>{{exercise.description | trimLength}}</p>
                 </div>
@@ -28,7 +28,7 @@
                 </form>
             </div>
         </div>
-       
+
 
     </div>
 </template>
@@ -41,6 +41,7 @@ export default {
   data() {
     return {
       showCreateExercise: false,  
+      showEditExercise: false,  
       newExercise: {
           name: '',
           description: ''
@@ -62,6 +63,9 @@ export default {
       this.$store.dispatch('getExercises');
   },
   methods: {
+    goToExercise(exercise){
+      this.$router.push({name:'Exercise',params:{exerciseId:exercise.id}});
+    },
     createExercise(){
         this.$store.dispatch('createExercise', { 
             name: this.newExercise.name,

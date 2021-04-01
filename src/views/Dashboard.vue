@@ -131,29 +131,4 @@ export default {
     opacity: 0.6;
   }
 }
-
-.modal{
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  left: 0;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba($color: $background, $alpha: 0.8);
-  .modal-inner{
-    width: 520px;
-    background: #282828;
-    border-radius: 1rem;
-    padding: 1rem;
-    box-shadow: $shadow;
-    .header{
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 2.5rem;
-    }
-  }
-}
 </style>

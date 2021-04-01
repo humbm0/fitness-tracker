@@ -249,13 +249,12 @@ $breakpoint-xlarge: 1200px;
   }
 }
 
-input{
+input, textarea{
   width: 100%;
   background: rgba($color: #fff, $alpha: 0.05);
   border: none;
   color: #fff;
   border-radius: 20px;
-  height: 40px;
   padding-left: 1rem;
   padding-right: 1rem;
   margin-bottom: 1rem;
@@ -263,6 +262,13 @@ input{
   &:focus{
     border: 1px solid rgba($color: #fff, $alpha: 0.3);
   }
+}
+input{
+  height: 40px;
+}
+textarea{
+  height: 10rem;
+  padding: 1rem;
 }
 
 button{
@@ -292,4 +298,29 @@ button{
   border-bottom: 1px solid rgba($color: #fff, $alpha: 0.2);
   padding-top: 1rem;
   padding-bottom: 1rem;
+}
+
+.modal{
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba($color: $background, $alpha: 0.8);
+  .modal-inner{
+    width: 520px;
+    background: #282828;
+    border-radius: 1rem;
+    padding: 1rem;
+    box-shadow: $shadow;
+    .header{
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+    }
+  }
 }

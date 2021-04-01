@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <SiteNav v-if="showNav"></SiteNav>
-    <router-view/>
+    <router-view class="page"/>
   </div>
 </template>
 
@@ -25,4 +25,8 @@ export default {
 <style lang="scss">
 @import "@/styles/base.scss";
 
+.page{
+  height: calc(100vh - 64px);
+  overflow: scroll;
+}
 </style>

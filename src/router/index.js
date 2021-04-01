@@ -23,6 +23,15 @@ const routes = [
     }
   },
   {
+    path: '/exercises/:exerciseId',
+    props: true,
+    name: 'Exercise',
+    component: () => import( /* webpackChunkName: "workout" */ '../views/Exercise.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/workouts',
     props: true,
     name: 'Workouts',
