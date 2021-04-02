@@ -266,9 +266,43 @@ input, textarea{
 input{
   height: 40px;
 }
+.input{
+  position: relative;
+  .suffix{
+    position: absolute;
+    top: 7px;
+    right: 16px;
+  }
+}
 textarea{
   height: 10rem;
   padding: 1rem;
+}
+.radio-buttons{
+  display: flex;
+  margin-bottom: 1.5rem;
+  input[type="radio"] {
+    opacity: 0;
+    position: fixed;
+    width: 0;
+  }
+  input[type="radio"]:checked + label {
+      background-color:#fff;
+  }
+  label {
+    display: inline-block;
+    background-color: rgba($color: #fff, $alpha: 0.4);
+    padding: 8px 32px;
+    border-radius: 4px 0px 0px 4px;
+    color: $background;
+  }
+  .radio-button{
+    &:last-child {
+      label{
+        border-radius: 0px 4px 4px 0px;
+      }
+    }
+  }
 }
 
 button{
@@ -322,5 +356,18 @@ button{
       justify-content: space-between;
       margin-bottom: 2.5rem;
     }
+  }
+}
+
+
+ion-icon{
+  &.small{
+    font-size: 16px;
+  }
+  &.medium{
+    font-size: 24px;
+  }
+  &.large{
+    font-size: 40px;
   }
 }

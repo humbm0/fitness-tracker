@@ -17,8 +17,11 @@
                       <h5>{{exercise.name}}</h5>
                       <div v-for="(set, idx) in exercise.sets" :key="idx" class="set">
                         <p>Set {{idx + 1}}</p>
-                        <p>{{set.reps}} reps<span v-if="set.weight"> * {{set.weight}}kg</span></p>
-                        <p v-if="set.timeOn">{{set.timeOn}} seconds</p>
+                          <div v-if="set.timeOn"><span>{{set.timeOn}}</span> seconds</div>
+                          <div v-if="set.reps"><span>{{set.reps}}</span> reps</div>
+                          <div>*</div>
+                          <div v-if="set.weight"><span>{{set.weight}}</span>kg</div>
+                        <ion-icon name="close-outline" class="medium" @click="deleteSet(exercise, idx)" v-if="editExercises"></ion-icon>
                       </div>
                       <button @click="addSet(exercise)" v-if="editExercises || exercise.sets.length == 0">Add set</button>
                   </div>
@@ -38,8 +41,23 @@
                           <a @click="showAddSet = false">Close</a>
                         </div>
                         <form @submit.prevent>
-                            <input v-model="set.reps" type="number" placeholder="Reps"/>
-                            <input v-model="set.weight" type="number" placeholder="Weight"/><span>kg</span>
+                            <div class="radio-buttons">
+                              <div class="radio-button">
+                                <input type="radio" id="reps" value="reps" v-model="set.type">
+                                <label for="reps">Reps</label>
+                              </div>
+                              <div class="radio-button">
+                                <input type="radio" id="time" value="time" v-model="set.type">
+                                <label for="time">Time</label>
+                              </div>
+                            </div>
+                            <input v-if="set.type == 'reps'" v-model="set.reps" type="number" placeholder="Reps"/>
+                            <div class="input" v-if="set.type == 'time'">
+                              <input v-model="set.time" type="number" placeholder="Time on"/><span class="suffix">seconds</span>
+                            </div>
+                            <div class="input" v-if="set.type">
+                              <input v-model="set.weight" type="number" placeholder="Weight"/><span class="suffix">kg</span>
+                            </div>
                             <button @click="addSet(exercise)">Add set</button>
                         </form>
                     </div>
@@ -61,6 +79,7 @@ export default {
       showAddSet: false,
       exercise: {},
       set: {
+        type: '',
         reps: '',
         weight: '',
         timeOn: ''
@@ -78,8 +97,14 @@ export default {
     });    
   },
   methods: {
+    deleteSet(exercise, idx){
+      console.log(exercise);
+      console.log(idx);
+      exercise.sets.splice(idx, 1)
+      console.log(exercise.sets);
+      this.$store.dispatch('addSet', exercise);
+    },
     addSet(exercise){
-
       if (exercise.sets.length == 0) {
         if (this.showAddSet == false) {
           this.showAddSet = true
@@ -126,7 +151,17 @@ export default {
 .set{
   padding: 1rem;
   background: $elBackground;
-  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
   border-radius: 0.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-content: center;
+  height: 80px;
+  *{
+    align-self: center;
+  }
+  span{
+    font-size: 28px;
+  }
 }
 </style>
