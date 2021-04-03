@@ -27,7 +27,6 @@ export default new Vuex.Store({
     }, 
     setWorkoutExercises(state, val){
       state.workoutExercises = val;
-      console.log(state.workoutExercises);
     },
     setExercises(state, val) {
       state.exercises = val
@@ -138,7 +137,7 @@ export default new Vuex.Store({
 
     async addExercisesToWorkout({ state }, workout) {
       workout.selectedExercises.forEach(exercise => {
-        fb.workoutExercisesCollection.doc(exercise.id).set({
+        fb.workoutExercisesCollection.add({
           name: exercise.name, 
           description: exercise.description, 
           exerciseId: exercise.id,
@@ -212,20 +211,29 @@ export default new Vuex.Store({
       })
       .then(() => {
         console.log("exercise updated in library");
-        // update exercise names in workouts
-        fb.workoutExercisesCollection.doc(exercise.id).update({
-          name: exercise.name,
-          description: exercise.description
+
+        //find matching exercises in workoutExercises colctions
+        fb.workoutExercisesCollection.where("exerciseId", "==", exercise.id).get().then(response => {
+          response.forEach(function(doc) {
+            let editExercise = doc.data();
+            editExercise.id = doc.id;
+            
+            // update exercise details in workoutExercises collection
+            fb.workoutExercisesCollection.doc(editExercise.id).update({
+              name: exercise.name,
+              description: exercise.description
+            })
+            .then(() => {
+              console.log("exercise(s) updated in workoutExercises collection");
+              // update exercise names in workouts
+              
+            })
+            .catch((error) => {
+                // The document probably doesn't exist.
+                console.error("Error updating document: ", error);
+            });
+          })
         })
-        .then(() => {
-          console.log("exercise updated in workouts");
-          // update exercise names in workouts
-          
-        })
-        .catch((error) => {
-            // The document probably doesn't exist.
-            console.error("Error updating document: ", error);
-        });
       })
       .catch((error) => {
           // The document probably doesn't exist.
