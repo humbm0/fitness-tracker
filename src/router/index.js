@@ -50,7 +50,7 @@ const routes = [
     }
   },
   {
-    path: '/workouts/:workoutId/addExercises',
+    path: '/workouts/:workoutId/add-exercises',
     props: true,
     name: 'AddExercises',
     component: () => import( /* webpackChunkName: "workout" */ '../views/addExercises.vue'),
@@ -59,7 +59,7 @@ const routes = [
     }
   },
   {
-    path: '/active-workout/:workoutId',
+    path: '/workouts/:workoutId/active-workout',
     props: true,
     name: 'ActiveWorkout',
     component: () => import( /* webpackChunkName: "activeWorkout" */ '../views/ActiveWorkout.vue'),

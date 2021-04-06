@@ -10,16 +10,19 @@
             <div class="col-12">
                 <h1>{{workout.name}}</h1>
                 <p>{{workoutExercises.length}} exercises</p>
-
+                <button @click="startWorkout(workout)">Start workout</button>
                 <div>
                   <div v-for="(exercise, idx) in workoutExercises" :key="idx" class="list-item">
                       <p>{{idx + 1}} of {{workoutExercises.length}}</p>
-                      <h5>{{exercise.name}}</h5>
+                      <div class="list-item-name">
+                        <h5>{{exercise.name}}</h5>
+                        <ion-icon name="close-outline" class="medium" @click="deleteExercise(exercise)" v-if="editExercises"></ion-icon>
+                      </div>
                       <div v-for="(set, idx) in exercise.sets" :key="idx" class="set">
                         <p>Set {{idx + 1}}</p>
                           <div v-if="set.timeOn"><span>{{set.timeOn}}</span> seconds</div>
                           <div v-if="set.reps"><span>{{set.reps}}</span> reps</div>
-                          <div>*</div>
+                          <div v-if="set.weight">*</div>
                           <div v-if="set.weight"><span>{{set.weight}}</span>kg</div>
                         <ion-icon name="close-outline" class="medium" @click="deleteSet(exercise, idx)" v-if="editExercises"></ion-icon>
                       </div>
@@ -31,7 +34,7 @@
 
                 <div>
                   <p v-if="workoutExercises.length == 0">This workout has no exercises...</p>
-                  <button @click="addExercises(workout)">Add exercises</button>
+                  <button @click="addExercises(workout)" v-if="editExercises">Add exercises</button>
                 </div>
 
                 <div class="createExercise modal" v-show="showAddSet">
@@ -97,6 +100,9 @@ export default {
     });    
   },
   methods: {
+    deleteExercise(exercise){
+      this.$store.dispatch('deleteWorkoutExercise', exercise);
+    },
     deleteSet(exercise, idx){
       console.log(exercise);
       console.log(idx);

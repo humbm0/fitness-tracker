@@ -83,15 +83,6 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.header-nav-bar{
-    display: flex;
-    justify-content: space-between;
-    padding: 1rem;
-}
-.list-item{
-    border-bottom: 1px solid rgba($color: #fff, $alpha: 0.2);
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-}
+<style lang="scss">
+
 </style>

@@ -104,6 +104,16 @@ export default new Vuex.Store({
       }
     },
 
+    async deleteWorkoutExercise({commit}, exercise){
+      fb.workoutExercisesCollection.doc(exercise.id).delete().then(() => {
+          console.log("Document successfully deleted!");
+      }).catch((error) => {
+          console.error("Error removing document: ", error);
+      });
+
+      return commit
+    },
+
     async getWorkoutExercises({commit}, workout){
       fb.workoutExercisesCollection.where("workoutId", "==", workout.id).onSnapshot(function(querySnapshot) {
         let exerciseArray = [];

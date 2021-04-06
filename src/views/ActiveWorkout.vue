@@ -1,31 +1,15 @@
 <template>
     <div class="container">
         <div class="row">
-            <div class="col-12">
+            <div class="header-nav-bar">
+                <div><a @click="$router.go(-1)">Back to {{workout.name}} workout</a></div>
+                <div class="float-right"></div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <p>{{workoutExercises.length}}</p>
                 <h1>{{workout.name}}</h1>
-
-                <div class="exercises">
-                  <div class="workout-card" v-for="(exercise, idx) in workout.exercises" :key="idx" v-show="idx == currentExercise">
-                    <p>Exercise {{idx + 1}}</p>
-                    <h4>{{exercise.name}}</h4>
-                    <p>{{exercise.reps}} reps</p>
-                    <p>{{exercise.sets}} sets</p>
-                    <p>{{exercise.rest}} rest</p>
-                  </div>
-                </div>
-
-                <button @click="nextExercise()">Exercise complete</button>
-                <button @click="skipExercise()">Skip exercise</button>
-
-                <div class="modal" v-if="workoutStatus == 'complete'">
-                  <div class="modal-inner">
-                    <div class="header">
-                      <h3>Well done! You completed the workout</h3>
-                    </div>
-                    <button @click="saveWorkout(workout)">Save your workout</button>
-                  </div>
-                </div>
-  
+              </div>
             </div>
         </div>
     </div>
@@ -49,7 +33,7 @@ export default {
     ...mapState(['userProfile', 'workouts']),
   },
   mounted(){
-    console.log(this.workout.exercises);
+    
   },
   methods: {
     async saveWorkout(workout){
