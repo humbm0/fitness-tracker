@@ -10,7 +10,7 @@
             <div class="col-12">
                 <h1>{{workout.name}}</h1>
                 <p>{{workoutExercises.length}} exercises</p>
-                <button @click="startWorkout(workout)">Start workout</button>
+                <button @click="startWorkout(workout, workoutExercises)">Start workout</button>
                 <div>
                   <div v-for="(exercise, idx) in workoutExercises" :key="idx" class="list-item">
                       <p>{{idx + 1}} of {{workoutExercises.length}}</p>
@@ -131,8 +131,8 @@ export default {
         this.$store.dispatch('addSet', exercise);
       }
     },
-    startWorkout(workout){
-      this.$router.push({name:'ActiveWorkout',params:{workoutId:workout.id, workout}});
+    startWorkout(workout, workoutExercises){
+      this.$router.push({name:'ActiveWorkout',params:{workoutId:workout.id, workout, workoutExercises}});
     },
     addExercises(workout){
       this.$router.push({name:'AddExercises',params:{workoutId:workout.id, workout}});
@@ -141,7 +141,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .exercises{
   display: flex;
 }
