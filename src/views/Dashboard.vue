@@ -14,7 +14,20 @@
             <button @click="startWorkout()">Start workout</button>
           </div>
         </div>
-      </div>
+    </div>
+    <div class="modal" v-show="selectWorkout">
+            <div class="modal-inner">
+                <div class="header">
+                  <h4>Select a workout</h4>
+                  <a @click="selectWorkout = false">Cancel</a>
+                </div>
+                <div v-for="(workout, idx) in workouts" :key="idx" class="list-item" @click="goToWorkout(workout)">
+                    <h5>{{workout.name}}</h5>
+                </div>
+                <p>or</p>
+                <button @click="startNewWorkout()">Start a new workout</button>
+            </div>
+        </div>
   </div>
 </div>
 </template>
@@ -55,13 +68,16 @@ export default {
     Strava
   },
   computed: {
-    ...mapState(['userProfile']),
+    ...mapState(['userProfile', 'workouts']),
   },
   mounted(){
-    // this.$store.dispatch('getWorkouts');
+    this.$store.dispatch('getWorkouts');
     // this.$store.dispatch('getLoggedWorkouts');
   },
   methods: {
+    startNewWorkout(){
+      this.$router.push({name:'LogWorkout'});
+    },
     startWorkout(workout){
       // select workout
       if (!workout){

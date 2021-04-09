@@ -68,6 +68,15 @@ const routes = [
     }
   },
   {
+    path: '/log-workout',
+    props: true,
+    name: 'LogWorkout',
+    component: () => import( /* webpackChunkName: "activeWorkout" */ '../views/LogWorkout.vue'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/login',
     name: 'Login',
     component: () => import( /* webpackChunkName: "login" */ '../views/Login.vue')
