@@ -1,22 +1,48 @@
 <template>
     <div class="container">
-        <div class="row">
+
+        <div class="row" v-if="!activeExercise">
             <div class="header-nav-bar">
                 <div><a @click="$router.go(-1)">Cancel</a></div>
-                <div class="float-right"></div>
+                <div class="float-right">Finish exercise</div>
             </div>
             <div class="row">
               <div class="col-12">
-                <div>
+                <div class="dropdown">
+                  <label for="">New exercise</label>
                   <input v-model="searchExercise" type="text" placeholder="Search exercise"/>
-                </div>
-                <div v-if="searchExercise">
-                    <p v-for="(exercise, idx) in filteredExercises" :key="idx" @click="goToExercise(exercise)">{{exercise.name}}</p>
-                    <p>Create "{{searchExercise}}"</p>
+                  <div v-if="searchExercise" class="list">
+                      <li v-for="(exercise, idx) in filteredExercises" :key="idx" @click="startExercise(exercise)">{{exercise.name}}</li>
+                      <li>Create "{{searchExercise}}"</li>
+                  </div>
                 </div>
               </div>
             </div>
         </div>
+
+        <div class="active-exercise" v-if="activeExercise">
+          <div class="header-nav-bar">
+              <div><a @click="activeExercise = ''">Cancel exercise</a></div>
+              <!-- <div class="float-right">Finish exercise</div> -->
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <h2>{{activeExercise.name}}</h2>
+              
+              <div class="set">
+                <p>Set 1</p>
+                <div>
+                  <div><span>10</span> reps</div>
+                  <div>*</div>
+                  <div><span>50</span>kg</div>
+                </div>
+                <button @click="finishSet()">Finish set</button>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
     </div>
 </template>
 
@@ -30,7 +56,8 @@ export default {
       searchExercise: '',
       currentExercise: 0,
       currentSet: 0,
-      workoutStatus: ''
+      workoutStatus: '',
+      activeExercise: ''
     }
   },
   components: {
@@ -46,6 +73,10 @@ export default {
     this.$store.dispatch('getExercises');
   },
   methods: {
+    startExercise(exercise){
+      console.log(exercise);
+      this.activeExercise = exercise;
+    },
     async saveWorkout(workout){
         this.$store.dispatch('saveWorkout', { 
             name: workout.name,
@@ -71,32 +102,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.exercises{
-  display: flex;
-}
-.workout-card{
-  background: $elBackground;
-  padding: 1.5rem;
-  border-radius: 0.5rem;
-  margin-right: 1rem;
-  p, h4{
-    margin-bottom: 0.5rem;
-  }
-}
-.exercise{
-  margin-bottom: 1.5rem;
-  button{
-    display: none;
-  }
-  &.active{
-    .set{
-      &.active{
-        height: 25rem;
-        flex-direction: column;
-        justify-content: space-around;
-        button{
-          display: block;
-        }
+.dropdown{
+  position: relative;
+  .list{
+    background: $elBackground;
+    border-radius: 1rem;
+    padding: .5rem;
+    position: absolute;
+    right: 0;
+    left: 0;
+    top: 5rem;
+    li{
+      list-style: none;
+      padding: 0.5rem;
+      margin-bottom: .5rem;
+      &:last-child{
+        margin-bottom: 0;
+        background: rgba($color: #fff, $alpha: 0.1);
+        border-radius: 0.5rem;
       }
     }
   }
