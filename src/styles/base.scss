@@ -250,6 +250,10 @@ $breakpoint-xlarge: 1200px;
   }
 }
 
+li{
+  list-style: none;
+}
+
 input, textarea{
   width: 100%;
   background: rgba($color: #fff, $alpha: 0.05);
@@ -388,3 +392,4 @@ ion-icon{
     justify-content: space-between;
   }
 }
+
